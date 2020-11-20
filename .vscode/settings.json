@@ -1,6 +1,6 @@
 {
-  "python.pythonPath": "/usr/local/bin/python3.8",
+  "python.pythonPath": "/usr/local/bin/python3",
   "code-runner.executorMap": {
-    "python": "/usr/local/bin/python3.8"
+    "python": "/usr/local/bin/python3"
   }
 }
