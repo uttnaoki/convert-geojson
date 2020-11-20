@@ -1,6 +1,7 @@
 output/*
 source/*
 !.gitkeep
+tmp*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

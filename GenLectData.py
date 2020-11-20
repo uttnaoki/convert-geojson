@@ -17,20 +17,23 @@ def get_corner(coors):
 
 def conv_lect_feature(feature):
     result = feature
+
     this_polygon = feature["geometry"]["coordinates"]
+    this_type = feature["geometry"]["type"]
 
     # 配列の深さが位置段階深い場合があるので修正
-    if len(this_polygon) > 1:
+    if this_type == "MultiPolygon":
         this_polygon = list(itertools.chain.from_iterable(this_polygon))
+        result["geometry"]["type"] = "Polygon"
 
 
     corners = get_corner(this_polygon[0])
-    result["geometry"]["coordinates"][0] = [
+    result["geometry"]["coordinates"] = [[
         [corners[0], corners[3]],
         [corners[1], corners[3]],
         [corners[1], corners[2]],
         [corners[0], corners[2]]
-    ]
+    ]]
     return result
 
 if __name__ == "__main__":
@@ -43,6 +46,6 @@ if __name__ == "__main__":
         if len(f["geometry"]["coordinates"]) > 0 ]
     geojson["features"] = lect_features
 
-    with open("output/fukuoka_park_lect.geojson", "w", encoding='utf8') as f:
+    with open("output/fukuoka_park_lect.json", "w", encoding='utf8') as f:
         json.dump(geojson, f, ensure_ascii=False)
 
