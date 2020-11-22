@@ -18,15 +18,23 @@ def get_corner(coors):
 def conv_lect_feature(feature):
     result = feature
 
-    this_polygon = feature["geometry"]["coordinates"]
     this_type = feature["geometry"]["type"]
 
-    # 配列の深さが位置段階深い場合があるので修正
+    # マルチポリゴンを単一ポリゴンに変換する関数
+    def Multi2Mono(multi_polygon):
+        mono_polygon = [[]]
+        for polygon in multi_polygon:
+            mono_polygon[0].extend(polygon[0])
+        return mono_polygon
+
+    # ポリゴンを取得
     if this_type == "MultiPolygon":
-        this_polygon = list(itertools.chain.from_iterable(this_polygon))
+        this_polygon = Multi2Mono(feature["geometry"]["coordinates"])
         result["geometry"]["type"] = "Polygon"
+    else:
+        this_polygon = feature["geometry"]["coordinates"]
 
-
+    # ポリゴンの座標について、最小と最大を取得（x_min, x_max, y_min, y_max）
     corners = get_corner(this_polygon[0])
     result["geometry"]["coordinates"] = [[
         [corners[0], corners[3]],
